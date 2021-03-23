@@ -11,6 +11,9 @@ interface EventData {
 const CalendarSummary: React.FunctionComponent = () => {
   const { isLoaded, setIsLoaded, error, setError } = useLoadStatus();
   const [events, setEvents] = useState<EventData[] | null>(null);
+  let quantityEvents: any = [];
+  let longestEvents: CalendarEvent[] = [];
+  let totalDurations: any = [];
 
   const fetchEvents = async () => {
     try {
@@ -20,7 +23,7 @@ const CalendarSummary: React.FunctionComponent = () => {
         const date: Date = new Date();
         date.setDate(date.getDate() + i);
         const response = await getCalendarEvents(date);
-        const day = { date, events: response};
+        const day = { date, events: response };
         days.push(day);
       }
 
@@ -35,12 +38,34 @@ const CalendarSummary: React.FunctionComponent = () => {
     fetchEvents();
   }, []);
 
-  const getTotalDuration = (arr: CalendarEvent[]):number => {
-    return arr.reduce((acc, curr) => acc += curr.durationInMinutes, 0);
+  const getTotalDuration = (arr: CalendarEvent[]): number => {
+    const totalDuration = arr.reduce((acc, curr) => acc += curr.durationInMinutes, 0);
+    totalDurations = [...totalDurations, totalDuration];
+    return totalDuration;
+  };
+
+  const getQuantityEvents = (arr: CalendarEvent[]): number => {
+    const quantity = arr.length;
+    quantityEvents = [...quantityEvents, quantity];
+    return quantity;
   }
 
-  const getLongestEvent = (arr: CalendarEvent[]):string => {
-    return [...arr].sort((a, b) =>  b.durationInMinutes - a.durationInMinutes)[0].title;
+  const getLongestEvent = (arr: CalendarEvent[]): CalendarEvent => {
+    const longestEvent = [...arr].sort((a, b) => b.durationInMinutes - a.durationInMinutes)[0]
+    longestEvents = [...longestEvents, longestEvent];
+    return longestEvent;
+  };
+
+  const getWeekTotalDuration = (): number => {
+    return totalDurations.reduce((acc: number, curr: number) => acc += curr, 0);
+  };
+
+  const getWeekTotalEvents = (): number => {
+    return quantityEvents.reduce((acc: number, curr: number) => acc += curr, 0);
+  }
+
+  const getWeekLongestEvent = (): CalendarEvent => {
+    return longestEvents.sort((a, b) => b.durationInMinutes - a.durationInMinutes)[0];
   }
 
   const getMarkupByLoadStatus = () => {
@@ -64,11 +89,19 @@ const CalendarSummary: React.FunctionComponent = () => {
               {events && events.map((it: any) => (
                 <tr key={it.date.toString()}>
                   <td>{getCustomDate(it.date)}</td>
-                  <td>{it.events.length}</td>
+                  <td>{getQuantityEvents(it.events)}</td>
                   <td>{getTotalDuration(it.events)}</td>
-                  <td>{getLongestEvent(it.events)}</td>
+                  <td>{getLongestEvent(it.events).title}</td>
                 </tr>
               ))}
+              {events &&
+                <tr>
+                  <td>Total</td>
+                  <td>{getWeekTotalEvents()}</td>
+                  <td>{getWeekTotalDuration()}</td>
+                  <td>{getWeekLongestEvent().title}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
