@@ -1,0 +1,63 @@
+.statusInfoContainer {
+  display: flex;
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.eventsTable {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #D8DBE6;
+  border-radius: 5px;
+  overflow: hidden;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.eventsTableHeader {
+  background-color: #373d46;
+  color: #fff;
+}
+
+.eventsTable tr th {
+  padding: .7em 1rem;
+  font-weight: normal;
+  text-align: center;
+}
+
+.eventsTable tr td {
+  padding: 1em 1rem;
+  text-align: center;
+}
+
+.eventsTable tbody tr:hover {
+  background-color: rgb(209, 209, 209);
+}
+
+.eventsTable tr th:nth-child(1),
+.eventsTable tr td:nth-child(1) {
+  width: 25%;
+  padding-left: 1rem;
+}
+
+.eventsTable tr td:nth-child(1) {
+  text-align: center;
+}
+
+.eventsTable tr th:nth-child(2),
+.eventsTable tr td:nth-child(2) {
+  width: 15%;
+}
+
+.eventsTable tr th:nth-child(3),
+.eventsTable tr td:nth-child(3) {
+  width: 15%;
+}
+
+.eventsTable tr th:nth-child(4),
+.eventsTable tr td:nth-child(4) {
+  width: 45%;
+}
+  
